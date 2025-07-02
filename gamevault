@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameVault - Negozio Gaming</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+    header, footer {
+      background-color: #222;
+      padding: 20px;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .hero h1 {
+      font-size: 3em;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .product {
+      background-color: #1e1e1e;
+      margin: 15px;
+      padding: 20px;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 0 10px #000;
+    }
+    .product img {
+      width: 100%;
+      border-radius: 5px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      margin-top: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .cart {
+      background-color: #1a1a1a;
+      padding: 20px;
+      margin: 30px auto;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 10px;
+    }
+    .cart h2 {
+      margin-top: 0;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    .checkout {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GameVault</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#shop">Negozio</a>
+      <a href="#cart">Carrello</a>
+      <a href="#contatti">Contatti</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <h1>Benvenuto su GameVault</h1>
+    <p>Acquista chiavi di gioco digitali in modo sicuro e veloce</p>
+  </section>
+
+  <section class="products" id="shop">
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150?text=Minecraft" alt="Minecraft">
+      <h3>Minecraft Java Edition</h3>
+      <p>&euro;19,99</p>
+      <button class="btn" onclick="addToCart('Minecraft Java Edition', 19.99)">Aggiungi al carrello</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150?text=GTA+V" alt="GTA V">
+      <h3>GTA V Premium</h3>
+      <p>&euro;14,99</p>
+      <button class="btn" onclick="addToCart('GTA V Premium', 14.99)">Aggiungi al carrello</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/250x150?text=FIFA+23" alt="FIFA 23">
+      <h3>FIFA 23 (PC)</h3>
+      <p>&euro;24,99</p>
+      <button class="btn" onclick="addToCart('FIFA 23 (PC)', 24.99)">Aggiungi al carrello</button>
+    </div>
+  </section>
+
+  <section class="cart" id="cart">
+    <h2>Il tuo carrello</h2>
+    <div id="cart-items"></div>
+    <div class="checkout">
+      <p><strong>Totale:</strong> &euro;<span id="cart-total">0.00</span></p>
+      <button class="btn" onclick="checkout()">Procedi al checkout</button>
+    </div>
+  </section>
+
+  <footer id="contatti">
+    <p>Contattaci: info@gamevault.it</p>
+    <p>&copy; 2025 GameVault. Tutti i diritti riservati.</p>
+  </footer>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${product} aggiunto al carrello!`);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartContainer = document.getElementById('cart-items');
+      const totalContainer = document.getElementById('cart-total');
+      cartContainer.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartContainer.innerHTML = '<p>Il carrello è vuoto.</p>';
+      } else {
+        cart.forEach((item, index) => {
+          total += item.price;
+          cartContainer.innerHTML += `
+            <div class="cart-item">
+              <span>${item.product}</span>
+              <span>&euro;${item.price.toFixed(2)}</span>
+              <button class="btn" onclick="removeFromCart(${index})">Rimuovi</button>
+            </div>
+          `;
+        });
+      }
+      totalContainer.textContent = total.toFixed(2);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Il carrello è vuoto.");
+        return;
+      }
+      alert("Checkout simulato. Implementa PayPal o Stripe per i pagamenti reali.");
+      cart = [];
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
